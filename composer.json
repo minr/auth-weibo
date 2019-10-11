@@ -1,0 +1,24 @@
+{
+    "name": "min/auth-weibo",
+    "description": "auth-weibo for flarum",
+    "type": "library",
+    "require": {
+        "php": ">=7.1",
+        "flarum/core": "^0.1.0-beta.10",
+        "league/oauth2-server": "dev-master",
+        "xiaosier/libweibo": "dev-master"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "内裤叔叔",
+            "email": "min@blued.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Flarum\\Auth\\Weibo\\": "src/"
+        }
+    },
+    "minimum-stability": "dev"
+}
