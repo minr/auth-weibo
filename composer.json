@@ -1,5 +1,5 @@
 {
-    "name": "min/auth-weibo",
+    "name": "minr/auth-weibo",
     "description": "auth-weibo for flarum",
     "type": "library",
     "require": {
