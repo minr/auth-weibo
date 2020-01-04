@@ -8,7 +8,7 @@
         "league/oauth2-client": "^2.4",
         "ext-json": "*"
     },
-    "version": "v0.1.2",
+    "version": "v0.1.3",
     "license": "MIT",
     "authors": [
         {
