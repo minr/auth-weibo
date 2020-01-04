@@ -1,13 +1,14 @@
 {
-    "name": "minr/auth-weibo",
-    "description": "auth-weibo for flarum",
+    "name": "minr/flarum-ext-auth-weibo",
+    "description": "Allow users to log in with Weibo.",
     "type": "library",
     "require": {
         "php": ">=7.1",
         "flarum/core": "^0.1.0-beta.10",
-        "league/oauth2-server": "dev-master",
-        "xiaosier/libweibo": "dev-master"
+        "league/oauth2-client": "^2.4",
+        "ext-json": "*"
     },
+    "version": "v0.1.0",
     "license": "MIT",
     "authors": [
         {
@@ -17,8 +18,20 @@
     ],
     "autoload": {
         "psr-4": {
-            "Flarum\\Auth\\Weibo\\": "src/"
+            "Minr\\Auth\\Weibo\\": "src/"
         }
     },
-    "minimum-stability": "dev"
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1.x-dev"
+        },
+        "flarum-extension": {
+            "title": "Weibo Login",
+            "icon": {
+                "name": "fab fa-weibo",
+                "backgroundColor": "#18ACFC",
+                "color": "#fff"
+            }
+        }
+    }
 }

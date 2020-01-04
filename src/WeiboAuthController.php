@@ -1,14 +1,15 @@
 <?php
+namespace Minr\Auth\Weibo;
 
-namespace Flarum\Auth\Weibo;
-
+use Exception;
 use Flarum\Forum\Auth\Registration;
 use Flarum\Forum\Auth\ResponseFactory;
 use Flarum\Http\UrlGenerator;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface;
+use Zend\Diactoros\Response\RedirectResponse;
 
 class WeiboAuthController implements RequestHandlerInterface {
     /**
@@ -31,21 +32,44 @@ class WeiboAuthController implements RequestHandlerInterface {
      * @param SettingsRepositoryInterface $settings
      * @param UrlGenerator $url
      */
-    public function __construct(ResponseFactory $response, SettingsRepositoryInterface $settings, UrlGenerator $url)
-    {
+    public function __construct(ResponseFactory $response, SettingsRepositoryInterface $settings, UrlGenerator $url){
         $this->response = $response;
         $this->settings = $settings;
-        $this->url = $url;
+        $this->url      = $url;
     }
 
 
-    public function handle(ServerRequestInterface $request): ResponseInterface {
+    /**
+     * @param Request $request
+     * @return ResponseInterface
+     * @throws Exception
+     */
+    public function handle(Request  $request): ResponseInterface {
         $redirectUri = $this->url->to('forum')->route('auth.weibo');
-
-        echo $redirectUri, "\n";
-        exit();
-
-        return ResponseInterface();
+        $provider   = new Weibo([
+            'clientId'          => $this->settings->get('minr-auth-weibo.client_id'),
+            'clientSecret'      => $this->settings->get('minr-auth-weibo.client_secret'),
+            'redirectUri'       => $redirectUri,
+            'graphApiVersion'   => 'v3.0',
+        ]);
+        $session        = $request->getAttribute('session');
+        $queryParams    = $request->getQueryParams();
+        $code           = array_get($queryParams, 'code');
+        if (!$code) {
+            $authUrl    = $provider->getAuthorizationUrl();
+            $session->put('oauth2state', $provider->getState());
+            return new RedirectResponse($authUrl);
+        }
+        $state          = array_get($queryParams, 'state');
+        if (!$state || $state !== $session->get('oauth2state')) {
+            $session->remove('oauth2state');
+            throw new Exception('Invalid state');
+        }
+        $token          = $provider->getAccessToken('authorization_code', [
+            "code"  => $code,
+        ]);
+        $user           = $provider->getResourceOwnerDetailsUrl($token);
+        var_dump($user);
     }
 }
 
