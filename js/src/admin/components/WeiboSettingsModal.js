@@ -6,19 +6,19 @@ export default class WeiboSettingsModal extends SettingsModal {
     }
 
     title() {
-        return app.translator.trans('flarum-auth-weibo.admin.weibo_settings.title');
+        return app.translator.trans('minr-auth-qq.admin.qq_settings.title');
     }
 
     form() {
         return [
             <div className="Form-group">
-                <label>{app.translator.trans('flarum-auth-weibo.admin.weibo_settings.api_key_label')}</label>
-                <input className="FormControl" bidi={this.setting('flarum-auth-weibo.api_key')}/>
+                <label>{app.translator.trans('minr-auth-weibo.admin.weibo_settings.client_id_label')}</label>
+                <input className="FormControl" bidi={this.setting('minr-auth-weibo.client_id')}/>
             </div>,
 
             <div className="Form-group">
-                <label>{app.translator.trans('flarum-auth-weibo.admin.weibo_settings.api_secret_label')}</label>
-                <input className="FormControl" bidi={this.setting('flarum-auth-weibo.api_secret')}/>
+                <label>{app.translator.trans('minr-auth-weibo.admin.weibo_settings.client_secret_label')}</label>
+                <input className="FormControl" bidi={this.setting('minr-auth-weibo.client_secret')}/>
             </div>
         ];
     }
