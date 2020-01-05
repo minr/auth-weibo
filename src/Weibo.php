@@ -37,7 +37,7 @@ class Weibo extends AbstractProvider{
      * @return string
      */
     public function getBaseAccessTokenUrl (array $params) {
-        return $this->domain . '/oauth2.0/access_token';
+        return $this->domain . '/oauth2/access_token';
     }
 
     /**
@@ -47,12 +47,7 @@ class Weibo extends AbstractProvider{
      * @return string
      * @throws IdentityProviderException
      */
-    public function getResourceOwnerDetailsUrl(AccessToken $token) {
-        $OpenidJson   = $this->fetchOpenid($token);
-        $openId       = json_decode($OpenidJson, TRUE);
-        $this->openid = $openId['openid'];
-        return $this->domain . '/user/get_user_info?access_token=' . $token . '&oauth_consumer_key=' . $this->clientId . '&openid=' . $openId['openid'];
-    }
+    public function getResourceOwnerDetailsUrl(AccessToken $token) {}
 
 
     /**
@@ -61,7 +56,8 @@ class Weibo extends AbstractProvider{
      * @return string
      */
     protected function getOpenidUrl(AccessToken $token) {
-        return $this->domain . '/oauth2.0/me?access_token=' . $token;
+        $uid = $token->getValues()['uid'] ?? 0;
+        return $this->domain . '/2/users/show.json?access_token=' . $token . '&uid='. $uid;
     }
 
 
@@ -72,15 +68,10 @@ class Weibo extends AbstractProvider{
      * @return mixed
      * @throws IdentityProviderException
      */
-    protected function fetchOpenid(AccessToken $token) {
+    public function fetchOpenid(AccessToken $token) {
         $url     = $this->getOpenidUrl($token);
         $request = $this->getAuthenticatedRequest(self::METHOD_GET, $url, $token);
-        $data    = array_keys($this->getSpecificResponse($request));
-        $parsed  = $data[0];
-        if (strpos($parsed, "callback") !== false) {
-            preg_match('/{(.*)}/', $parsed, $data);
-            $data = $data[0];
-        }
+        $data    = $this->getSpecificResponse($request);
         return $data;
     }
 
@@ -106,14 +97,12 @@ class Weibo extends AbstractProvider{
         $params   = $grant->prepareRequestParameters($params, $options);
         $request  = $this->getAccessTokenRequest($params);
         $response = $this->getParsedResponse($request);
-        $_response = json_decode($response, true);
-        if(is_null($_response)){
-            print_r($response);
+        if(is_null($response)){
             throw new \UnexpectedValueException(
                 'Invalid response received from Authorization Server. Expected JSON.'
             );
         }
-        $prepared = $this->prepareAccessTokenResponse($_response);
+        $prepared = $this->prepareAccessTokenResponse($response);
         $token    = $this->createAccessToken($prepared, $grant);
         return $token;
     }
@@ -139,8 +128,7 @@ class Weibo extends AbstractProvider{
      */
     protected function parseSpecificResponse(ResponseInterface $response) {
         $content = (string)$response->getBody();
-        parse_str($content, $parsed);
-        return $parsed;
+        return json_decode($content, true);
     }
 
 
@@ -153,12 +141,6 @@ class Weibo extends AbstractProvider{
      * @return void
      */
     protected function checkResponse(ResponseInterface $response, $data) {
-        /// 可能我需要进行额外特殊的校验
-        $data   = str_replace([
-            "callback(",
-            ");"
-        ], "", $data);
-        $data   = json_decode($data, true);
         if(isset($data['error'])) {
             throw new IdentityProviderException($data['error_description'], $response->getStatusCode(), $response);
         }

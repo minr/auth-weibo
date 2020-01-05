@@ -30,7 +30,7 @@
             "title": "Weibo Login",
             "icon": {
                 "name": "fab fa-weibo",
-                "backgroundColor": "#18ACFC",
+                "backgroundColor": "#ff2605",
                 "color": "#fff"
             }
         }

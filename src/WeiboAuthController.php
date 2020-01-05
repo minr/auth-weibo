@@ -68,8 +68,18 @@ class WeiboAuthController implements RequestHandlerInterface {
         $token          = $provider->getAccessToken('authorization_code', [
             "code"  => $code,
         ]);
-        $user           = $provider->getResourceOwnerDetailsUrl($token);
-        var_dump($user);
+        $user           = $provider->fetchOpenid($token);
+
+        return $this->response->make(
+            'weibo', $user["id"],
+            function (Registration $registration) use ($user) {
+                $registration
+                    ->suggestEmail("")
+                    ->provideAvatar($user['avatar_hd'])
+                    ->suggestUsername($user["name"])
+                    ->setPayload($user);
+            }
+        );
     }
 }
 
