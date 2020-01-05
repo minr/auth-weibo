@@ -19,7 +19,7 @@ composer require minr/flarum-ext-auth-weibo
 'regex:/^[-_a-zA-Z0-9\x7f-\xff]+$/i',
 ```
 
-- flarum/core/src/Forum/Auth/Registration.php
+- ./vendor/flarum/core/src/Forum/Auth/Registration.php
 
 ```php
 /**
