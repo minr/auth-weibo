@@ -19,7 +19,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Minr\\Auth\\QQ\\": "src/"
+            "Minr\\Auth\\Weibo\\": "src/"
         }
     },
     "extra": {

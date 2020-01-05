@@ -6,7 +6,7 @@ export default class WeiboSettingsModal extends SettingsModal {
     }
 
     title() {
-        return app.translator.trans('minr-auth-qq.admin.qq_settings.title');
+        return app.translator.trans('minr-auth-weibo.admin.weibo_settings.title');
     }
 
     form() {
