@@ -4,7 +4,7 @@
     "type": "flarum-extension",
     "keywords": ["authentication"],
     "license": "MIT",
-    "version": "v0.1.5",
+    "version": "v0.1.6",
     "authors": [
         {
             "name": "MIN",
