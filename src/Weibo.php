@@ -28,7 +28,7 @@ class Weibo extends AbstractProvider{
      * @return string
      */
     public function getBaseAuthorizationUrl () {
-        return $this->domain . '/oauth2.0/authorize';
+        return $this->domain . '/oauth2/authorize';
     }
 
     /**
