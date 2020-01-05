@@ -1,24 +1,25 @@
 {
     "name": "minr/flarum-ext-auth-weibo",
-    "description": "Allow users to log in with Weibo.",
-    "type": "library",
-    "require": {
-        "php": ">=7.1",
-        "flarum/core": "^0.1.0-beta.10",
-        "league/oauth2-client": "^2.4",
-        "ext-json": "*"
-    },
-    "version": "v0.1.4",
+    "description": "Allow users to log in with weibo.",
+    "type": "flarum-extension",
+    "keywords": ["authentication"],
     "license": "MIT",
+    "version": "v0.1.5",
     "authors": [
         {
-            "name": "min",
-            "email": "min@blued.com"
+            "name": "MIN",
+            "email": "294953530@qq.com",
+            "role": "master"
         }
     ],
+    "require": {
+        "flarum/core": "^0.1.0-beta.9",
+        "league/oauth2-client": "^2.2",
+        "ext-json": "*"
+    },
     "autoload": {
         "psr-4": {
-            "Minr\\Auth\\Weibo\\": "src/"
+            "Minr\\Auth\\QQ\\": "src/"
         }
     },
     "extra": {
