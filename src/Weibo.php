@@ -1,4 +1,13 @@
 <?php
+/*
+ * This file is part of minr/flarum-ext-auth-weibo.
+ *
+ * Copyright (c) 2021 Minr.
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace Minr\Auth\Weibo;
 
 use League\OAuth2\Client\Provider\AbstractProvider;
@@ -27,7 +36,7 @@ class Weibo extends AbstractProvider{
      *
      * @return string
      */
-    public function getBaseAuthorizationUrl () {
+    public function getBaseAuthorizationUrl (): string {
         return $this->domain . '/oauth2/authorize';
     }
 
@@ -36,7 +45,7 @@ class Weibo extends AbstractProvider{
      * @param array $params
      * @return string
      */
-    public function getBaseAccessTokenUrl (array $params) {
+    public function getBaseAccessTokenUrl (array $params): string {
         return $this->domain . '/oauth2/access_token';
     }
 
@@ -44,8 +53,7 @@ class Weibo extends AbstractProvider{
      * Get provider url to fetch user details
      *
      * @param AccessToken $token
-     * @return string
-     * @throws IdentityProviderException
+     * @return void
      */
     public function getResourceOwnerDetailsUrl(AccessToken $token) {}
 
@@ -55,7 +63,7 @@ class Weibo extends AbstractProvider{
      * @param AccessToken $token
      * @return string
      */
-    protected function getOpenidUrl(AccessToken $token) {
+    protected function getOpenidUrl(AccessToken $token): string {
         $uid = $token->getValues()['uid'] ?? 0;
         return $this->domain . '/2/users/show.json?access_token=' . $token . '&uid='. $uid;
     }
@@ -71,8 +79,7 @@ class Weibo extends AbstractProvider{
     public function fetchOpenid(AccessToken $token) {
         $url     = $this->getOpenidUrl($token);
         $request = $this->getAuthenticatedRequest(self::METHOD_GET, $url, $token);
-        $data    = $this->getSpecificResponse($request);
-        return $data;
+        return $this->getSpecificResponse($request);
     }
 
 
@@ -87,7 +94,7 @@ class Weibo extends AbstractProvider{
      * @return AccessTokenInterface
      * @throws IdentityProviderException
      */
-    public function getAccessToken($grant, array $options = []) {
+    public function getAccessToken($grant, array $options = []): AccessTokenInterface {
         $grant = $this->verifyGrant($grant);
         $params = [
             'client_id'     => $this->clientId,
@@ -103,8 +110,7 @@ class Weibo extends AbstractProvider{
             );
         }
         $prepared = $this->prepareAccessTokenResponse($response);
-        $token    = $this->createAccessToken($prepared, $grant);
-        return $token;
+        return $this->createAccessToken($prepared, $grant);
     }
 
 
@@ -153,7 +159,7 @@ class Weibo extends AbstractProvider{
      *
      * @return array
      */
-    protected function getDefaultScopes() {
+    protected function getDefaultScopes(): array {
         return [];
     }
     /**
@@ -162,7 +168,7 @@ class Weibo extends AbstractProvider{
      * @param AccessToken $token
      * @return WeiboResourceOwner
      */
-    protected function createResourceOwner(array $response, AccessToken $token) {
+    protected function createResourceOwner(array $response, AccessToken $token): WeiboResourceOwner {
         return new WeiboResourceOwner($response);
     }
 }

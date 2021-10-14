@@ -11,6 +11,9 @@
 use Flarum\Api\Serializer\UserSerializer;
 use Flarum\Extend;
 use FoF\Components\Extend\AddFofComponents;
+use Minr\Auth\Weibo\Api\BindController;
+use Minr\Auth\Weibo\Api\UnBindController;
+use Minr\Auth\Weibo\AuthController;
 
 return [
     new AddFofComponents(),
@@ -23,7 +26,26 @@ return [
         ->js(__DIR__.'/js/dist/admin.js'),
 
     (new Extend\Routes('forum'))
-        ->get('/auth/weibo', 'auth.weibo', Minr\Auth\Weibo\WeiboAuthController::class),
+        ->get('/auth/weibo', 'auth.weibo', AuthController::class),
+
+    (new Extend\Routes('api'))
+        ->get('/auth/weibo/bind', 'auth.weibo.api.bind', BindController::class)
+        ->post('/auth/weibo/unbind', 'auth.weibo.api.unbind', UnBindController::class),
 
     (new Extend\Locales(__DIR__ . '/locale')),
+
+    (new Extend\ApiSerializer(UserSerializer::class))
+        ->attributes(function($serializer, $user, $attributes){
+            $loginProviders = $user->loginProviders();
+
+            $steamProvider = $loginProviders->where('provider', 'weibo')->first();
+
+            $attributes['WeiboAuth'] = [
+                'isLinked' => $steamProvider !== null,
+                'identifier' => null, // Hidden, don't expose this information
+                'providersCount' => $loginProviders->count()
+            ];
+
+            return $attributes;
+        }),
 ];

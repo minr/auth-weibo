@@ -1,4 +1,13 @@
 <?php
+/*
+ * This file is part of minr/flarum-ext-auth-weibo.
+ *
+ * Copyright (c) 2021 Minr.
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace Minr\Auth\Weibo;
 
 use League\OAuth2\Client\Provider\ResourceOwnerInterface;
