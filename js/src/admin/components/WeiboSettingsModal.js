@@ -1,24 +1,34 @@
-import SettingsModal from 'flarum/components/SettingsModal';
+import { settings } from '@fof-components';
+import ExtensionPage from 'flarum/components/ExtensionPage';
 
-export default class WeiboSettingsModal extends SettingsModal {
-    className() {
-        return 'WeiboSettingsModal Modal--small';
+const {
+    items: { StringItem },
+} = settings;
+
+export default class WeiboSettingsModal extends ExtensionPage {
+    oninit(vnode) {
+        super.oninit(vnode);
+        this.setting = this.setting.bind(this);
     }
 
-    title() {
-        return app.translator.trans('minr-auth-weibo.admin.weibo_settings.title');
-    }
-
-    form() {
+    content() {
         return [
-            <div className="Form-group">
-                <label>{app.translator.trans('minr-auth-weibo.admin.weibo_settings.client_id_label')}</label>
-                <input className="FormControl" bidi={this.setting('minr-auth-weibo.client_id')}/>
-            </div>,
+            <div className="WeiboAuthSettingsPage">
+                <div className="container">
+                    <div className="Form-group">
+                        <StringItem  setting={this.setting}>
 
-            <div className="Form-group">
-                <label>{app.translator.trans('minr-auth-weibo.admin.weibo_settings.client_secret_label')}</label>
-                <input className="FormControl" bidi={this.setting('minr-auth-weibo.client_secret')}/>
+                        </StringItem>
+                        <label>{app.translator.trans('minr-auth-weibo.admin.weibo_settings.client_id_label')}</label>
+                        <input className="FormControl" bidi={this.setting('minr-auth-weibo.client_id')}/>
+                    </div>,
+
+                    <div className="Form-group">
+                        <label>{app.translator.trans('minr-auth-weibo.admin.weibo_settings.client_secret_label')}</label>
+                        <input className="FormControl" bidi={this.setting('minr-auth-weibo.client_secret')}/>
+                    </div>
+                    {this.submitButton()}
+                </div>
             </div>
         ];
     }

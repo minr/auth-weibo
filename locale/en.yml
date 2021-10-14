@@ -17,5 +17,5 @@ minr-auth-weibo:
   forum:
 
     # These translations are used in the Log In modal dialog.
-    log_in:
+    buttons:
       with_weibo_button: Log In with Weibo
